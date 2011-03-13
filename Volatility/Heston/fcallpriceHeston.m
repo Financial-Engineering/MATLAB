@@ -1,0 +1,16 @@
+function P = fcallprice(Y,K,r,kappa,theta,rho,sig,v,tau)
+% -----------------------------------------------------
+% This function calculates the futures option price
+% using the Heston's model
+% -----------------------------------------------------
+
+if sig<0.0001 && v>=0
+    sig = 0.0001;
+end
+
+P = exp(Y)*exp(-r*tau)*(1/2+1/pi* ... 
+    (fintegausslege('charf1',0,50,75,Y,K,r,kappa,theta,rho,sig,v,tau) + ... 
+    fintegausslege('charf1',50,500,75,Y,K,r,kappa,theta,rho,sig,v,tau))) - ... 
+    K*exp(-r*tau)*(1/2+1/pi* ... 
+    (fintegausslege('charf2',0,50,75,Y,K,r,kappa,theta,rho,sig,v,tau) + ... 
+    fintegausslege('charf2',50,500,75,Y,K,r,kappa,theta,rho,sig,v,tau)));

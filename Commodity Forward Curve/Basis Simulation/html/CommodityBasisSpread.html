@@ -1,0 +1,179 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Basis Forward Curve Simulation</title><meta name="generator" content="MATLAB 7.11"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2011-01-25"><meta name="DC.source" content="CommodityBasisSpread.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>Basis Forward Curve Simulation</h1><!--introduction--><p>A two factor Monte-Carlo model that simulates a commodity basis term structure based on long and short contract months.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">CommodityBasisSpread</a></li><li><a href="#2">Input Parameters</a></li><li><a href="#3">Output Parameters</a></li></ul></div><h2>CommodityBasisSpread<a name="1"></a></h2><pre class="codeinput"><span class="keyword">function</span> [X,F]=CommodityBasisSpread(F,P,T,expiry,dt,alpha,eta,mu,epsilon)
+</pre><h2>Input Parameters<a name="2"></a></h2><p>
+<table border=1>
+<tr><td>S0</td><td>Initial forward rates</td></tr>
+<tr><td>P</td><td>Simulated hub forward rates</td></tr>
+<tr><td>dates</td><td>valuation dates</td></tr>
+<tr><td>expiry</td><td>contract expiry dates</td></tr>
+<tr><td>sig</td><td>volatility of long and short contracts</td></tr>
+<tr><td>mu</td><td>long term mean of ratio X</td></tr>
+<tr><td>dt</td><td>length of time slice in years</td></tr>
+<tr><td>kappa</td><td>rate of mean reversion</td></tr>
+<tr><td>eta</td><td>random deviants</td></tr>
+</table>
+</p><h2>Output Parameters<a name="3"></a></h2><p>
+<table border=1>
+<tr><td>X</td><td>Simulated basis spread</td></tr>
+<tr><td>S</td><td>Simulated hub forward rates</td></tr>
+</table>
+</p><pre class="codeinput">    F = [F;zeros(length(T)-1,length(expiry))];
+    <span class="comment">%X = zeros(length(T)+1,length(expiry));</span>
+    X = zeros(length(T)-1,length(expiry));
+</pre><p>Initial spread</p><p><img src="CommodityBasisSpread_eq95421.png" alt="$$&#xA;X_0=\log{\frac{S_0}{P_0}}&#xA;$$"></p><pre class="codeinput">    X(1,:) = log(F(1,:)./P(1,:));
+
+    <span class="comment">% Vector of simulation dates</span>
+    j=2:length(T);
+
+    <span class="comment">% Iterate across contract months</span>
+    <span class="keyword">for</span> i=1:length(expiry(2,:))
+</pre><p>Generate a vector of random movements of the forward rate for each contract month:</p><p><img src="CommodityBasisSpread_eq12571.png" alt="$$&#xA;\lambda = \alpha_i\left[\mu_i-X_{j-1}\right]\Delta t+\eta_i\epsilon_{j-1}\sqrt{\Delta t}&#xA;$$"></p><pre class="codeinput">        lambda = alpha(i) * (mu(i) - X(j-1,i)) * dt + eta(i) * epsilon(j-1) * sqrt(dt);
+</pre><p>Flatten spread rates where node date &gt;= contract expiry</p><p><img src="CommodityBasisSpread_eq64851.png" alt="$$ X_j=X_{j-1} + \lambda \cdot \mathbf{1}_{T_{j-1} \le t_i} $$"></p><pre class="codeinput">        X(j,i) = X(j-1,i) + lambda .* (T(j-1) &lt;= expiry(2,i));
+</pre><p>Evolve the forward rate by adding the spread to the base rate</p><p><img src="CommodityBasisSpread_eq77010.png" alt="$$ F_i=P_i e^{X_i} \mbox{ or } \log{F_i}-\log{P_i}=X_i$$"></p><pre class="codeinput">        F(j,i) = P(j,i) .* exp(X(j,i));
+</pre><pre class="codeinput">    <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br>
+      Published with MATLAB&reg; 7.11<br></p></div><!--
+##### SOURCE BEGIN #####
+%% Basis Forward Curve Simulation
+% A two factor Monte-Carlo model that simulates a commodity basis term
+% structure based on long and short contract months.
+
+%% CommodityBasisSpread 
+%
+function [X,F]=CommodityBasisSpread(F,P,T,expiry,dt,alpha,eta,mu,epsilon)
+%% Input Parameters
+%
+% <html>
+% <table border=1>
+% <tr><td>S0</td><td>Initial forward rates</td></tr>
+% <tr><td>P</td><td>Simulated hub forward rates</td></tr>
+% <tr><td>dates</td><td>valuation dates</td></tr>
+% <tr><td>expiry</td><td>contract expiry dates</td></tr>
+% <tr><td>sig</td><td>volatility of long and short contracts</td></tr>
+% <tr><td>mu</td><td>long term mean of ratio X</td></tr>
+% <tr><td>dt</td><td>length of time slice in years</td></tr>
+% <tr><td>kappa</td><td>rate of mean reversion</td></tr>
+% <tr><td>eta</td><td>random deviants</td></tr>
+% </table>
+% </html>
+%
+%% Output Parameters
+%
+% <html>
+% <table border=1>
+% <tr><td>X</td><td>Simulated basis spread</td></tr>
+% <tr><td>S</td><td>Simulated hub forward rates</td></tr>
+% </table>
+% </html>
+
+    F = [F;zeros(length(T)-1,length(expiry))];
+    %X = zeros(length(T)+1,length(expiry));
+    X = zeros(length(T)-1,length(expiry));
+    
+    %%
+    % Initial spread
+    %
+    % $$
+    % X_0=\log{\frac{S_0}{P_0}}
+    % $$
+    %
+    X(1,:) = log(F(1,:)./P(1,:));
+  
+    % Vector of simulation dates
+    j=2:length(T);
+    
+    % Iterate across contract months
+    for i=1:length(expiry(2,:))
+        
+        %%
+        % Generate a vector of random movements of the forward rate
+        % for each contract month:
+        % 
+        % $$
+        % \lambda = \alpha_i\left[\mu_i-X_{j-1}\right]\Delta t+\eta_i\epsilon_{j-1}\sqrt{\Delta t}
+        % $$
+        lambda = alpha(i) * (mu(i) - X(j-1,i)) * dt + eta(i) * epsilon(j-1) * sqrt(dt);
+ 
+        %% 
+        % Flatten spread rates where node date >= contract expiry
+        %
+        % $$ X_j=X_{j-1} + \lambda \cdot \mathbf{1}_{T_{j-1} \le t_i} $$
+        X(j,i) = X(j-1,i) + lambda .* (T(j-1) <= expiry(2,i));
+        
+        %%
+        % Evolve the forward rate by adding the spread to the base rate
+        % 
+        % $$ F_i=P_i e^{X_i} \mbox{ or } \log{F_i}-\log{P_i}=X_i$$
+
+        F(j,i) = P(j,i) .* exp(X(j,i));
+        
+    end
+
+end
+
+##### SOURCE END #####
+--></body></html>

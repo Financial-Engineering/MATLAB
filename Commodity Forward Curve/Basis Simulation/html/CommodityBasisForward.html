@@ -1,0 +1,135 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Basis Forward Curve Simulation</title><meta name="generator" content="MATLAB 7.11"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2011-01-25"><meta name="DC.source" content="CommodityBasisForward.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>Basis Forward Curve Simulation</h1><!--introduction--><p>A two factor Monte-Carlo model that simulates a commodity basis term structure based on long and short contract months.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">CommodityBasisForward</a></li><li><a href="#3">Input Parameters</a></li><li><a href="#4">Output Parameters</a></li></ul></div><h2>CommodityBasisForward<a name="1"></a></h2><pre class="codeinput"><span class="keyword">function</span> [H,X,F] = CommodityBasisForward(P,F,T,expiry_hub,expiry_fwd,s1,s2,mu1,mu2,kappa,dt,rho,a1,a2,alpha,eta,mu,zeta1,zeta2,epsilon)
+</pre><h2>Input Parameters<a name="3"></a></h2><p>
+<table border=1>
+<tr><td>F</td><td>Initial forward rates</td></tr>
+<tr><td>P</td><td>Initial hub forward rates</td></tr>
+<tr><td>T</td><td>valuation dates</td></tr>
+<tr><td>exp_hub</td><td>hub contract expiry dates</td></tr>
+<tr><td>exp_fwd</td><td>fwd contract expiry dates</td></tr>
+<tr><td>sig</td><td>volatility of long and short contracts</td></tr>
+<tr><td>mu</td><td>long term mean of ratio X</td></tr>
+<tr><td>dt</td><td>length of time slice in years</td></tr>
+<tr><td>kappa</td><td>rate of mean reversion</td></tr>
+<tr><td>eta</td><td>random deviants</td></tr>
+</table>
+</p><h2>Output Parameters<a name="4"></a></h2><p>
+<table border=1>
+<tr><td>F</td><td>Simulated Hub Forward Rates</td></tr>
+<tr><td>X</td><td>Simulated Basis Spread</td></tr>
+<tr><td>H</td><td>Simulated Forward Rates</td></tr>
+</table>
+</p><pre class="codeinput">    H = CommodityForward(P,T,expiry_hub,s1,s2,mu1,mu2,kappa,dt,rho,a1,a2,zeta1,zeta2,@CorrelatedTwoFactor,@evolveMult);
+    [X,F] = CommodityBasisSpread(F,H,T,expiry_fwd,dt,alpha,eta,mu,epsilon);
+</pre><pre class="codeoutput">Input argument "P" is undefined.
+
+Error in ==&gt; CommodityBasisForward at 36
+    H = CommodityForward(P,T,expiry_hub,s1,s2,mu1,mu2,kappa,dt,rho,a1,a2,zeta1,zeta2,@CorrelatedTwoFactor,@evolveMult);
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br>
+      Published with MATLAB&reg; 7.11<br></p></div><!--
+##### SOURCE BEGIN #####
+%% Basis Forward Curve Simulation
+% A two factor Monte-Carlo model that simulates a commodity basis term
+% structure based on long and short contract months.
+
+%% CommodityBasisForward 
+%
+function [H,X,F] = CommodityBasisForward(P,F,T,expiry_hub,expiry_fwd,s1,s2,mu1,mu2,kappa,dt,rho,a1,a2,alpha,eta,mu,zeta1,zeta2,epsilon)
+
+%% Input Parameters
+%
+% <html>
+% <table border=1>
+% <tr><td>F</td><td>Initial forward rates</td></tr>
+% <tr><td>P</td><td>Initial hub forward rates</td></tr>
+% <tr><td>T</td><td>valuation dates</td></tr>
+% <tr><td>exp_hub</td><td>hub contract expiry dates</td></tr>
+% <tr><td>exp_fwd</td><td>fwd contract expiry dates</td></tr>
+% <tr><td>sig</td><td>volatility of long and short contracts</td></tr>
+% <tr><td>mu</td><td>long term mean of ratio X</td></tr>
+% <tr><td>dt</td><td>length of time slice in years</td></tr>
+% <tr><td>kappa</td><td>rate of mean reversion</td></tr>
+% <tr><td>eta</td><td>random deviants</td></tr>
+% </table>
+% </html>
+%
+
+%% Output Parameters
+%
+% <html>
+% <table border=1>
+% <tr><td>F</td><td>Simulated Hub Forward Rates</td></tr>
+% <tr><td>X</td><td>Simulated Basis Spread</td></tr>
+% <tr><td>H</td><td>Simulated Forward Rates</td></tr>
+% </table>
+% </html>
+    H = CommodityForward(P,T,expiry_hub,s1,s2,mu1,mu2,kappa,dt,rho,a1,a2,zeta1,zeta2,@CorrelatedTwoFactor,@evolveMult);
+    [X,F] = CommodityBasisSpread(F,H,T,expiry_fwd,dt,alpha,eta,mu,epsilon);   
+end
+
+##### SOURCE END #####
+--></body></html>

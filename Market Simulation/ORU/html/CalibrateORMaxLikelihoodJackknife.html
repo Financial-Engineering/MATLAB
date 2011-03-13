@@ -1,0 +1,133 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>CalibrateORMaxLikelihoodJackknife</title><meta name="generator" content="MATLAB 7.11"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2011-01-20"><meta name="DC.source" content="CalibrateORMaxLikelihoodJackknife.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">CalibrateORMaxLikelihoodJackknife</a></li><li><a href="#4">Reduces mean reversion parameter bias by partioning sample</a></li><li><a href="#5">Jackknife Function</a></li><li><a href="#6">Partition sample</a></li><li><a href="#7">Calculate for entire partition.</a></li><li><a href="#8">Calculate the individual partitions.</a></li><li><a href="#9">Now use the jacknife estimator adjustment.</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> [ mu, sigma, lambda ] = CalibrateORMaxLikelihoodJackknife(m, S, deltaT, T)
+</pre><h2>CalibrateORMaxLikelihoodJackknife<a name="3"></a></h2><h2>Reduces mean reversion parameter bias by partioning sample<a name="4"></a></h2><h2>Jackknife Function<a name="5"></a></h2><p><img src="CalibrateORMaxLikelihoodJackknife_eq93245.png" alt="$$ \hat{\theta}_{jack} = \frac{m}{m-1}\hat{\theta}_T-\frac{\sum_{i=1}^{m}\hat{\theta}_{li}}{m^2-m}$$"></p><pre class="codeinput">    <span class="keyword">function</span> [j] = jackknife(m, thetaT, thetaLi)
+        j = (m /(m-1)) * thetaT - sum(thetaLi)/(m^2 - m);
+    <span class="keyword">end</span>
+</pre><h2>Partition sample<a name="6"></a></h2><pre class="codeinput">    partlength = floor(length(S)/m);
+
+    Spart = zeros(m,partlength);
+
+    <span class="keyword">for</span> i=1:m
+        Spart(i,:) = S(partlength*(i-1)+1:partlength*i);
+    <span class="keyword">end</span>
+</pre><h2>Calculate for entire partition.<a name="7"></a></h2><pre class="codeinput">    [ muT, sigmaT, lambdaT ] = CalibrateORMaxLikelihood(S, deltaT, T);
+</pre><h2>Calculate the individual partitions.<a name="8"></a></h2><pre class="codeinput">    mupart = zeros(m,1);
+    sigmapart = zeros(m,1);
+    lambdapart= zeros(m,1);
+
+    <span class="keyword">for</span> i=1:m
+        [ mupart(i), sigmapart(i), lambdapart(i) ] = <span class="keyword">...</span>
+            CalibrateORMaxLikelihood(Spart(i,:), deltaT, T/m);
+    <span class="keyword">end</span>
+</pre><h2>Now use the jacknife estimator adjustment.<a name="9"></a></h2><pre class="codeinput">    lambda = jackknife(m, lambdaT, lambdapart);
+    mu = jackknife(m, muT, mupart);
+    sigma = jackknife(m, sigmaT, sigmapart);
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br>
+      Published with MATLAB&reg; 7.11<br></p></div><!--
+##### SOURCE BEGIN #####
+function [ mu, sigma, lambda ] = CalibrateORMaxLikelihoodJackknife(m, S, deltaT, T)
+
+%% CalibrateORMaxLikelihoodJackknife
+%% Reduces mean reversion parameter bias by partioning sample 
+
+%% Jackknife Function
+%
+% $$ \hat{\theta}_{jack} = \frac{m}{m-1}\hat{\theta}_T-\frac{\sum_{i=1}^{m}\hat{\theta}_{li}}{m^2-m}$$
+    function [j] = jackknife(m, thetaT, thetaLi)
+        j = (m /(m-1)) * thetaT - sum(thetaLi)/(m^2 - m);
+    end
+
+%% Partition sample
+    partlength = floor(length(S)/m);
+    
+    Spart = zeros(m,partlength);
+    
+    for i=1:m
+        Spart(i,:) = S(partlength*(i-1)+1:partlength*i);
+    end
+
+%% Calculate for entire partition.
+    [ muT, sigmaT, lambdaT ] = CalibrateORMaxLikelihood(S, deltaT, T);
+
+%% Calculate the individual partitions.
+    mupart = zeros(m,1);
+    sigmapart = zeros(m,1);
+    lambdapart= zeros(m,1);
+    
+    for i=1:m
+        [ mupart(i), sigmapart(i), lambdapart(i) ] = ...
+            CalibrateORMaxLikelihood(Spart(i,:), deltaT, T/m);
+    end
+    
+%% Now use the jacknife estimator adjustment. 
+    lambda = jackknife(m, lambdaT, lambdapart);  
+    mu = jackknife(m, muT, mupart);
+    sigma = jackknife(m, sigmaT, sigmapart);
+end
+
+##### SOURCE END #####
+--></body></html>

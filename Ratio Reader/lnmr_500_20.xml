@@ -1,0 +1,625 @@
+<ratioGeneration>
+    <matrix columns="73" rowsPerBlock="10000" name="lnmr_500_20" dir="./ratio"/>
+    <simulation paths="500" seed="123456" numberEigenValues="31" confidenceLevel="0.95" model="LogNormalMeanReversion"/>
+    <baseDate>2001-06-29</baseDate>
+    <observationRange>
+        <startDate>1999-07-01</startDate>
+        <endDate>2001-06-29</endDate>
+    </observationRange>
+    <marketRates>
+        
+        <!--Proxied to AUD/USD spot rate ratio-->
+        <marketRate name="EQ:BHP Spot Price">
+            <column>0</column>
+        </marketRate>
+        
+        
+        <marketRate name="AUD/USD Spot">
+            <column>0</column>
+        </marketRate>
+        <marketRate name="GBP/USD Spot">
+            <column>1</column>
+        </marketRate>
+        <marketRate name="USD/JPY Spot">
+            <column>2</column>
+        </marketRate>
+        <marketRate name="AUD/USD 50Delta Vol 1W">
+            <column>3</column>
+        </marketRate>
+        <marketRate name="AUD/USD 50Delta Vol 1M">
+            <column>4</column>
+        </marketRate>
+        <marketRate name="AUD/USD 50Delta Vol 2M">
+            <column>5</column>
+        </marketRate>
+        <marketRate name="AUD/USD 50Delta Vol 3M">
+            <column>6</column>
+        </marketRate>
+        <marketRate name="AUD/USD 50Delta Vol 6M">
+            <column>7</column>
+        </marketRate>
+        <marketRate name="AUD/USD 50Delta Vol 1Y">
+            <column>8</column>
+        </marketRate>
+        <marketRate name="AUD/USD 50Delta Vol 2Y">
+            <column>9</column>
+        </marketRate>
+        <marketRate name="AUD/USD 50Delta Vol 3Y">
+            <column>10</column>
+        </marketRate>
+        <marketRate name="AUD/USD 50Delta Vol 5Y">
+            <column>11</column>
+        </marketRate>
+        <marketRate name="AUD 50Delta Vol 1Y">
+            <column>12</column>
+        </marketRate>
+        <marketRate name="AUD 50Delta Vol 2Y">
+            <column>13</column>
+        </marketRate>
+        <marketRate name="AUD 50Delta Vol 3Y">
+            <column>14</column>
+        </marketRate>
+        <marketRate name="AUD 50Delta Vol 4Y">
+            <column>15</column>
+        </marketRate>
+        <marketRate name="AUD 50Delta Vol 5Y">
+            <column>16</column>
+        </marketRate>
+        <marketRate name="AUD Overnight">
+            <column>17</column>
+        </marketRate>
+        <marketRate name="AUD BAB 1M">
+            <column>18</column>
+        </marketRate>
+        <marketRate name="AUD BAB 2M">
+            <column>19</column>
+        </marketRate>
+        <marketRate name="AUD BAB 3M">
+            <column>20</column>
+        </marketRate>
+        <marketRate name="AUD BAB 6M">
+            <column>21</column>
+        </marketRate>
+        <marketRate name="AUD Swap 1Y">
+            <column>22</column>
+        </marketRate>
+        <marketRate name="AUD Swap 2Y">
+            <column>23</column>
+        </marketRate>
+        <marketRate name="AUD Swap 3Y">
+            <column>24</column>
+        </marketRate>
+        <marketRate name="AUD Swap 4Y">
+            <column>25</column>
+        </marketRate>
+        <marketRate name="AUD Swap 5Y">
+            <column>26</column>
+        </marketRate>
+        <marketRate name="AUD Swap 7Y">
+            <column>27</column>
+        </marketRate>
+        <marketRate name="AUD Swap 10Y">
+            <column>28</column>
+        </marketRate>
+        <marketRate name="AUD Swap 15Y">
+            <column>29</column>
+        </marketRate>
+        <marketRate name="AUD Swap 20Y">
+            <column>30</column>
+        </marketRate>
+        <marketRate name="USD Overnight">
+            <column>31</column>
+        </marketRate>
+        <marketRate name="USD Cash 1M">
+            <column>32</column>
+        </marketRate>
+        <marketRate name="USD Cash 2M">
+            <column>33</column>
+        </marketRate>
+        <marketRate name="USD Cash 3M">
+            <column>34</column>
+        </marketRate>
+        <marketRate name="USD Cash 6M">
+            <column>35</column>
+        </marketRate>
+        <marketRate name="USD Cash 12M">
+            <column>36</column>
+        </marketRate>
+        <marketRate name="USD Swap 2Y">
+            <column>37</column>
+        </marketRate>
+        <marketRate name="USD Swap 3Y">
+            <column>38</column>
+        </marketRate>
+        <marketRate name="USD Swap 4Y">
+            <column>39</column>
+        </marketRate>
+        <marketRate name="USD Swap 5Y">
+            <column>40</column>
+        </marketRate>
+        <marketRate name="USD Swap 7Y">
+            <column>41</column>
+        </marketRate>
+        <marketRate name="USD Swap 10Y">
+            <column>42</column>
+        </marketRate>
+        <marketRate name="USD Swap 15Y">
+            <column>43</column>
+        </marketRate>
+        <marketRate name="USD Swap 20Y">
+            <column>44</column>
+        </marketRate>
+        <marketRate name="GBP Overnight">
+            <column>45</column>
+        </marketRate>
+        <marketRate name="GBP Cash 1M">
+            <column>46</column>
+        </marketRate>
+        <marketRate name="GBP Cash 2M">
+            <column>47</column>
+        </marketRate>
+        <marketRate name="GBP Cash 3M">
+            <column>48</column>
+        </marketRate>
+        <marketRate name="GBP Cash 6M">
+            <column>49</column>
+        </marketRate>
+        <marketRate name="GBP Cash 12M">
+            <column>50</column>
+        </marketRate>
+        <marketRate name="GBP Swap 2Y">
+            <column>51</column>
+        </marketRate>
+        <marketRate name="GBP Swap 3Y">
+            <column>52</column>
+        </marketRate>
+        <marketRate name="GBP Swap 4Y">
+            <column>53</column>
+        </marketRate>
+        <marketRate name="GBP Swap 5Y">
+            <column>54</column>
+        </marketRate>
+        <marketRate name="GBP Swap 7Y">
+            <column>55</column>
+        </marketRate>
+        <marketRate name="GBP Swap 10Y">
+            <column>56</column>
+        </marketRate>
+        <marketRate name="GBP Swap 15Y">
+            <column>57</column>
+        </marketRate>
+        <marketRate name="GBP Swap 20Y">
+            <column>58</column>
+        </marketRate>
+        <marketRate name="JPY Overnight">
+            <column>59</column>
+        </marketRate>
+        <marketRate name="JPY Cash 1M">
+            <column>60</column>
+        </marketRate>
+        <marketRate name="JPY Cash 2M">
+            <column>61</column>
+        </marketRate>
+        <marketRate name="JPY Cash 3M">
+            <column>62</column>
+        </marketRate>
+        <marketRate name="JPY Cash 6M">
+            <column>63</column>
+        </marketRate>
+        <marketRate name="JPY Cash 12M">
+            <column>64</column>
+        </marketRate>
+        <marketRate name="JPY Swap 2Y">
+            <column>65</column>
+        </marketRate>
+        <marketRate name="JPY Swap 3Y">
+            <column>66</column>
+        </marketRate>
+        <marketRate name="JPY Swap 4Y">
+            <column>67</column>
+        </marketRate>
+        <marketRate name="JPY Swap 5Y">
+            <column>68</column>
+        </marketRate>
+        <marketRate name="JPY Swap 7Y">
+            <column>69</column>
+        </marketRate>
+        <marketRate name="JPY Swap 10Y">
+            <column>70</column>
+        </marketRate>
+        <marketRate name="JPY Swap 15Y">
+            <column>71</column>
+        </marketRate>
+        <marketRate name="JPY Swap 20Y">
+            <column>72</column>
+        </marketRate>
+    </marketRates>
+    <statisticsSet>
+        <rateStatistics rateClass="AUD/USD Spot">
+            <rateOfMeanReversion>-0.27916</rateOfMeanReversion>
+            <volatility>0.115365</volatility>
+            <drift>0.759691</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="GBP/USD Spot">
+            <rateOfMeanReversion>0.692025</rateOfMeanReversion>
+            <volatility>0.0792246</volatility>
+            <drift>1.51756</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="USD/JPY Spot">
+            <rateOfMeanReversion>9.29649</rateOfMeanReversion>
+            <volatility>0.102081</volatility>
+            <drift>1.97675</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD/USD 50Delta Vol 1W">
+            <rateOfMeanReversion>-22.031</rateOfMeanReversion>
+            <volatility>0.97692</volatility>
+            <drift>10.5029</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD/USD 50Delta Vol 1M">
+            <rateOfMeanReversion>-7.92477</rateOfMeanReversion>
+            <volatility>0.497572</volatility>
+            <drift>3.66053</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD/USD 50Delta Vol 2M">
+            <rateOfMeanReversion>-5.87261</rateOfMeanReversion>
+            <volatility>0.390732</volatility>
+            <drift>2.66199</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD/USD 50Delta Vol 3M">
+            <rateOfMeanReversion>-4.42409</rateOfMeanReversion>
+            <volatility>0.320165</volatility>
+            <drift>1.97072</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD/USD 50Delta Vol 6M">
+            <rateOfMeanReversion>-2.72757</rateOfMeanReversion>
+            <volatility>0.223642</volatility>
+            <drift>1.17279</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD/USD 50Delta Vol 1Y">
+            <rateOfMeanReversion>-2.08086</rateOfMeanReversion>
+            <volatility>0.166064</volatility>
+            <drift>0.863671</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD/USD 50Delta Vol 2Y">
+            <rateOfMeanReversion>-1.58573</rateOfMeanReversion>
+            <volatility>0.157426</volatility>
+            <drift>0.624921</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD/USD 50Delta Vol 3Y">
+            <rateOfMeanReversion>-1.51605</rateOfMeanReversion>
+            <volatility>0.109956</volatility>
+            <drift>0.580294</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD/USD 50Delta Vol 5Y">
+            <rateOfMeanReversion>-2.02422</rateOfMeanReversion>
+            <volatility>0.106751</volatility>
+            <drift>0.783216</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD 50Delta Vol 1Y">
+            <rateOfMeanReversion>-1.22677</rateOfMeanReversion>
+            <volatility>0.275596</volatility>
+            <drift>0.694108</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD 50Delta Vol 2Y">
+            <rateOfMeanReversion>0.145339</rateOfMeanReversion>
+            <volatility>0.180418</volatility>
+            <drift>0.0059668</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD 50Delta Vol 3Y">
+            <rateOfMeanReversion>0.696964</rateOfMeanReversion>
+            <volatility>0.159914</volatility>
+            <drift>-0.298971</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD 50Delta Vol 4Y">
+            <rateOfMeanReversion>0.793576</rateOfMeanReversion>
+            <volatility>0.157468</volatility>
+            <drift>-0.356509</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD 50Delta Vol 5Y">
+            <rateOfMeanReversion>0.866972</rateOfMeanReversion>
+            <volatility>0.147071</volatility>
+            <drift>-0.398961</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD Overnight">
+            <rateOfMeanReversion>-1.44611</rateOfMeanReversion>
+            <volatility>0.134494</volatility>
+            <drift>0.490952</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD BAB 1M">
+            <rateOfMeanReversion>-0.874777</rateOfMeanReversion>
+            <volatility>0.101696</volatility>
+            <drift>0.297362</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD BAB 2M">
+            <rateOfMeanReversion>-0.890475</rateOfMeanReversion>
+            <volatility>0.102159</volatility>
+            <drift>0.303971</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD BAB 3M">
+            <rateOfMeanReversion>-1.22508</rateOfMeanReversion>
+            <volatility>0.112428</volatility>
+            <drift>0.422075</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD BAB 6M">
+            <rateOfMeanReversion>-1.73688</rateOfMeanReversion>
+            <volatility>0.127889</volatility>
+            <drift>0.605054</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD Swap 1Y">
+            <rateOfMeanReversion>-2.42907</rateOfMeanReversion>
+            <volatility>0.149829</volatility>
+            <drift>0.853515</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD Swap 2Y">
+            <rateOfMeanReversion>-3.19855</rateOfMeanReversion>
+            <volatility>0.158075</volatility>
+            <drift>1.14124</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD Swap 3Y">
+            <rateOfMeanReversion>-3.89457</rateOfMeanReversion>
+            <volatility>0.163477</volatility>
+            <drift>1.40316</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD Swap 4Y">
+            <rateOfMeanReversion>-3.95039</rateOfMeanReversion>
+            <volatility>0.159232</volatility>
+            <drift>1.43419</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD Swap 5Y">
+            <rateOfMeanReversion>-4.16111</rateOfMeanReversion>
+            <volatility>0.15553</volatility>
+            <drift>1.51938</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD Swap 7Y">
+            <rateOfMeanReversion>-4.6999</rateOfMeanReversion>
+            <volatility>0.152045</volatility>
+            <drift>1.72975</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD Swap 10Y">
+            <rateOfMeanReversion>-5.26459</rateOfMeanReversion>
+            <volatility>0.149661</volatility>
+            <drift>1.95028</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD Swap 15Y">
+            <rateOfMeanReversion>-5.18699</rateOfMeanReversion>
+            <volatility>0.146789</volatility>
+            <drift>1.93118</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="AUD Swap 20Y">
+            <rateOfMeanReversion>-5.32304</rateOfMeanReversion>
+            <volatility>0.148184</volatility>
+            <drift>1.98492</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="USD Overnight">
+            <rateOfMeanReversion>-6.36588</rateOfMeanReversion>
+            <volatility>0.271255</volatility>
+            <drift>2.36566</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="USD Cash 1M">
+            <rateOfMeanReversion>-5.41644</rateOfMeanReversion>
+            <volatility>0.147394</volatility>
+            <drift>2.06908</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="USD Cash 2M">
+            <rateOfMeanReversion>-5.37157</rateOfMeanReversion>
+            <volatility>0.188552</volatility>
+            <drift>2.05272</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="USD Cash 3M">
+            <rateOfMeanReversion>-4.16145</rateOfMeanReversion>
+            <volatility>0.13448</volatility>
+            <drift>1.63505</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="USD Cash 6M">
+            <rateOfMeanReversion>-3.56271</rateOfMeanReversion>
+            <volatility>0.187767</volatility>
+            <drift>1.43179</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="USD Cash 12M">
+            <rateOfMeanReversion>-1.76656</rateOfMeanReversion>
+            <volatility>0.15182</volatility>
+            <drift>0.794631</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="USD Swap 2Y">
+            <rateOfMeanReversion>-3.58688</rateOfMeanReversion>
+            <volatility>0.152385</volatility>
+            <drift>1.33146</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="USD Swap 3Y">
+            <rateOfMeanReversion>-3.4394</rateOfMeanReversion>
+            <volatility>0.149348</volatility>
+            <drift>1.27874</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="USD Swap 4Y">
+            <rateOfMeanReversion>-3.48248</rateOfMeanReversion>
+            <volatility>0.146311</volatility>
+            <drift>1.29545</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="USD Swap 5Y">
+            <rateOfMeanReversion>-3.74188</rateOfMeanReversion>
+            <volatility>0.148099</volatility>
+            <drift>1.39227</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="USD Swap 7Y">
+            <rateOfMeanReversion>-4.04195</rateOfMeanReversion>
+            <volatility>0.142601</volatility>
+            <drift>1.50822</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="USD Swap 10Y">
+            <rateOfMeanReversion>-4.71519</rateOfMeanReversion>
+            <volatility>0.141425</volatility>
+            <drift>1.76567</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="USD Swap 15Y">
+            <rateOfMeanReversion>-5.18839</rateOfMeanReversion>
+            <volatility>0.134677</volatility>
+            <drift>1.94978</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="USD Swap 20Y">
+            <rateOfMeanReversion>-5.66029</rateOfMeanReversion>
+            <volatility>0.129601</volatility>
+            <drift>2.12837</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="GBP Overnight">
+            <rateOfMeanReversion>-130.38</rateOfMeanReversion>
+            <volatility>0.928153</volatility>
+            <drift>45.1005</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="GBP Cash 1M">
+            <rateOfMeanReversion>-3.86056</rateOfMeanReversion>
+            <volatility>0.112324</volatility>
+            <drift>1.34796</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="GBP Cash 2M">
+            <rateOfMeanReversion>-2.06512</rateOfMeanReversion>
+            <volatility>0.0870732</volatility>
+            <drift>0.723378</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="GBP Cash 3M">
+            <rateOfMeanReversion>-1.5067</rateOfMeanReversion>
+            <volatility>0.0795329</volatility>
+            <drift>0.529012</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="GBP Cash 6M">
+            <rateOfMeanReversion>-0.621529</rateOfMeanReversion>
+            <volatility>0.0649982</volatility>
+            <drift>0.21755</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="GBP Cash 12M">
+            <rateOfMeanReversion>-0.874735</rateOfMeanReversion>
+            <volatility>0.0794222</volatility>
+            <drift>0.310894</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="GBP Swap 2Y">
+            <rateOfMeanReversion>-1.79398</rateOfMeanReversion>
+            <volatility>0.104678</volatility>
+            <drift>0.64671</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="GBP Swap 3Y">
+            <rateOfMeanReversion>-2.08783</rateOfMeanReversion>
+            <volatility>0.106523</volatility>
+            <drift>0.763265</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="GBP Swap 4Y">
+            <rateOfMeanReversion>-2.57399</rateOfMeanReversion>
+            <volatility>0.111764</volatility>
+            <drift>0.942494</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="GBP Swap 5Y">
+            <rateOfMeanReversion>-2.80373</rateOfMeanReversion>
+            <volatility>0.109819</volatility>
+            <drift>1.02434</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="GBP Swap 7Y">
+            <rateOfMeanReversion>-3.668</rateOfMeanReversion>
+            <volatility>0.112686</volatility>
+            <drift>1.32969</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="GBP Swap 10Y">
+            <rateOfMeanReversion>-5.25684</rateOfMeanReversion>
+            <volatility>0.118664</volatility>
+            <drift>1.88491</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="GBP Swap 15Y">
+            <rateOfMeanReversion>-9.77361</rateOfMeanReversion>
+            <volatility>0.140045</volatility>
+            <drift>3.47348</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="GBP Swap 20Y">
+            <rateOfMeanReversion>-12.727</rateOfMeanReversion>
+            <volatility>0.1401</volatility>
+            <drift>4.47824</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="JPY Overnight">
+            <rateOfMeanReversion>-94.2147</rateOfMeanReversion>
+            <volatility>4.53506</volatility>
+            <drift>13.6012</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="JPY Cash 1M">
+            <rateOfMeanReversion>-33.9662</rateOfMeanReversion>
+            <volatility>2.60029</volatility>
+            <drift>5.26805</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="JPY Cash 2M">
+            <rateOfMeanReversion>-18.5331</rateOfMeanReversion>
+            <volatility>1.76054</volatility>
+            <drift>2.94897</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="JPY Cash 3M">
+            <rateOfMeanReversion>-12.5483</rateOfMeanReversion>
+            <volatility>1.28368</volatility>
+            <drift>2.0487</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="JPY Cash 6M">
+            <rateOfMeanReversion>-8.12997</rateOfMeanReversion>
+            <volatility>0.631852</volatility>
+            <drift>1.40985</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="JPY Cash 12M">
+            <rateOfMeanReversion>-9.89505</rateOfMeanReversion>
+            <volatility>0.491637</volatility>
+            <drift>1.77097</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="JPY Swap 2Y">
+            <rateOfMeanReversion>-11.8204</rateOfMeanReversion>
+            <volatility>0.636375</volatility>
+            <drift>2.28186</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="JPY Swap 3Y">
+            <rateOfMeanReversion>-11.5643</rateOfMeanReversion>
+            <volatility>0.553774</volatility>
+            <drift>2.40319</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="JPY Swap 4Y">
+            <rateOfMeanReversion>-11.4828</rateOfMeanReversion>
+            <volatility>0.480223</volatility>
+            <drift>2.53067</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="JPY Swap 5Y">
+            <rateOfMeanReversion>-11.4426</rateOfMeanReversion>
+            <volatility>0.425679</volatility>
+            <drift>2.6432</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="JPY Swap 7Y">
+            <rateOfMeanReversion>-10.8332</rateOfMeanReversion>
+            <volatility>0.3525</volatility>
+            <drift>2.67101</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="JPY Swap 10Y">
+            <rateOfMeanReversion>-9.61638</rateOfMeanReversion>
+            <volatility>0.28238</volatility>
+            <drift>2.5008</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="JPY Swap 15Y">
+            <rateOfMeanReversion>-8.72521</rateOfMeanReversion>
+            <volatility>0.238182</volatility>
+            <drift>2.37454</drift>
+        </rateStatistics>
+        <rateStatistics rateClass="JPY Swap 20Y">
+            <rateOfMeanReversion>-9.10147</rateOfMeanReversion>
+            <volatility>0.227339</volatility>
+            <drift>2.5139</drift>
+        </rateStatistics>
+    </statisticsSet>
+    <creditNodes>
+        <creditNode days="1"/>
+        <creditNode weeks="1"/>
+        <creditNode weeks="2"/>
+        <creditNode months="1"/>
+        <creditNode months="2"/>
+        <creditNode months="3"/>
+        <creditNode months="6"/>
+        <creditNode months="9"/>
+        <creditNode years="1"/>
+        <creditNode years="2"/>
+        <creditNode years="3"/>
+        <creditNode years="4"/>
+        <creditNode years="5"/>
+        <creditNode years="6"/>
+        <creditNode years="7"/>
+        <creditNode years="8"/>
+        <creditNode years="9"/>
+        <creditNode years="11"/>
+        <creditNode years="12"/>
+    </creditNodes>
+</ratioGeneration>

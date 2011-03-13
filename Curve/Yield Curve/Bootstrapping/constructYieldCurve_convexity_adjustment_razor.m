@@ -1,0 +1,150 @@
+setGlobalVariables;
+
+%load ('mat files\futures_convexity_adjustment.mat');
+
+%today = 734198; % '01-mar-2010'
+
+contracts_config{1} = {'mm', 15, @calcMMZeroRate2, 'ACT/360', 'MODFOLLOWING'}; % mm
+contracts_config{2} = {'fut', 12, @calcEUROFUTZeroRate, 'ACT/360', 'NONE'}; % fut
+contracts_config{3} = {'swap', 7, @calcSWAPZeroRate2, 'ACT/365', 'MODFOLLOWING'}; % swap
+
+% Altermative MM contracts : {contract term, contract term base,
+% annualised simple rate} - Annualised simple rates = zero rate
+contracts{1,1} = 1;
+contracts{1,2} = 'd';
+contracts{1,3} = 0.00314;
+contracts{2,1} = 1;
+contracts{2,2} = 'd';
+contracts{2,3} = 0.0025;
+contracts{2,4} = 1; % days offset
+contracts{3,1} = 1;
+contracts{3,2} = 'w';
+contracts{3,3} = 0.0037;
+contracts{3,4} = 2;
+contracts{4,1} = 1;
+contracts{4,2} = 'm';
+contracts{4,3} = 0.00434;
+contracts{4,4} = 2;
+contracts{5,1} = 2;
+contracts{5,2} = 'm';
+contracts{5,3} = 0.00575;
+contracts{5,4} = 2;
+contracts{6,1} = 3;
+contracts{6,2} = 'm';
+contracts{6,3} = 0.00715;
+contracts{6,4} = 2;
+contracts{7,1} = 4;
+contracts{7,2} = 'm';
+contracts{7,3} = 0.00807;
+contracts{7,4} = 2;
+contracts{8,1} = 5;
+contracts{8,2} = 'm';
+contracts{8,3} = 0.00896;
+contracts{8,4} = 2;
+contracts{9,1} = 6;
+contracts{9,2} = 'm';
+contracts{9,3} = 0.00991;
+contracts{9,4} = 2;
+contracts{10,1} = 7;
+contracts{10,2} = 'm';
+contracts{10,3} = 0.01035;
+contracts{10,4} = 2;
+contracts{11,1} = 8;
+contracts{11,2} = 'm';
+contracts{11,3} = 0.01081;
+contracts{11,4} = 2;
+contracts{12,1} = 9;
+contracts{12,2} = 'm';
+contracts{12,3} = 0.01124;
+contracts{12,4} = 2;
+contracts{13,1} = 10;
+contracts{13,2} = 'm';
+contracts{13,3} = 0.01159;
+contracts{13,4} = 2;
+contracts{14,1} = 11;
+contracts{14,2} = 'm';
+contracts{14,3} = 0.01193;
+contracts{14,4} = 2;
+contracts{15,1} = 12;
+contracts{15,2} = 'm';
+contracts{15,3} = 0.01233;
+contracts{15,4} = 2;
+
+% future contracts : {contract start date, contract end date, price}
+contracts{16,1} = 734214;
+contracts{16,2} = 734305;
+contracts{16,3} = 99.335;
+contracts{17,1} = 734305;
+contracts{17,2} = 734396;
+contracts{17,3} = 99.215;
+contracts{18,1} = 734396;
+contracts{18,2} = 734487;
+contracts{18,3} = 99.045;
+contracts{19,1} = 734487;
+contracts{19,2} = 734578;
+contracts{19,3} = 98.86;
+contracts{20,1} = 734578;
+contracts{20,2} = 734669;
+contracts{20,3} = 98.675;
+contracts{21,1} = 734669;
+contracts{21,2} = 734760;
+contracts{21,3} = 98.465;
+contracts{22,1} = 734767;
+contracts{22,2} = 734858;
+contracts{22,3} = 98.24;
+contracts{23,1} = 734858;
+contracts{23,2} = 734949;
+contracts{23,3} = 98.005;
+contracts{24,1} = 734949;
+contracts{24,2} = 735040;
+contracts{24,3} = 97.82;
+contracts{25,1} = 735040;
+contracts{25,2} = 735131;
+contracts{25,3} = 97.625;
+contracts{26,1} = 735131;
+contracts{26,2} = 735222;
+contracts{26,3} = 97.435;
+contracts{27,1} = 735222;
+contracts{27,2} = 735313;
+contracts{27,3} = 97.235;
+
+% swap contracts : {contract term, contract term base, frequency term,
+% frequency base, annualized swap rate}
+contracts{28,1} = 2;
+contracts{28,2} = 'y';
+contracts{28,3} = 12;
+contracts{28,4} = 'm';
+contracts{28,5} = 0.014463;
+contracts{29,1} = 3;
+contracts{29,2} = 'y';
+contracts{29,3} = 12;
+contracts{29,4} = 'm';
+contracts{29,5} = 0.0183;
+contracts{30,1} = 4;
+contracts{30,2} = 'y';
+contracts{30,3} = 12;
+contracts{30,4} = 'm';
+contracts{30,5} = 0.021495;
+contracts{31,1} = 5;
+contracts{31,2} = 'y';
+contracts{31,3} = 12;
+contracts{31,4} = 'm';
+contracts{31,5} = 0.02444;
+contracts{32,1} = 6;
+contracts{32,2} = 'y';
+contracts{32,3} = 12;
+contracts{32,4} = 'm';
+contracts{32,5} = 0.026875;
+contracts{33,1} = 7;
+contracts{33,2} = 'y';
+contracts{33,3} = 12;
+contracts{33,4} = 'm';
+contracts{33,5} = 0.02897;
+contracts{34,1} = 8;
+contracts{34,2} = 'y';
+contracts{34,3} = 12;
+contracts{34,4} = 'm';
+contracts{34,5} = 0.03073;
+
+
+[yieldCurve yield_curve_config] = bootstrap(contracts_config, contracts, curve_config)

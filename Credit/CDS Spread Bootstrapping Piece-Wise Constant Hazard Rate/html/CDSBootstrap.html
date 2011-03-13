@@ -1,0 +1,214 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>CDSBootstrap</title><meta name="generator" content="MATLAB 7.12"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2011-01-14"><meta name="DC.source" content="CDSBootstrap.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">Credit Default Swap Piece-Wise Hazard Rate Bootstrapping</a></li><li><a href="#2">Input Parameters</a></li><li><a href="#3">Output Parameters</a></li><li><a href="#4">Hazard Rate Function</a></li></ul></div><h2>Credit Default Swap Piece-Wise Hazard Rate Bootstrapping<a name="1"></a></h2><pre class="codeinput"><span class="keyword">function</span> [sp,hz]=CDSBootstrap(rr,df,spread)
+</pre><h2>Input Parameters<a name="2"></a></h2><p>
+<table border=1>
+<tr><td>rr</td><td>Recovery Rate</td></tr>
+<tr><td>df</td><td>Discount Factors</td></tr>
+<tr><td>spread</td><td>Market credit default swap spreads</td></tr>
+</table>
+</p><h2>Output Parameters<a name="3"></a></h2><p>
+<table border=1>
+<tr><td>sp</td><td>Survival Probabilities</td></tr>
+<tr><td>hz</td><td>Hazard Rates</td></tr>
+</table>
+</p><h2>Hazard Rate Function<a name="4"></a></h2><p><img src="CDSBootstrap_eq85888.png" alt="$$ h\left(\cdot\right) = \mbox{max}\left(-\frac{\mbox{ln}\frac{p_{i+1}}{p_{i}}}{\Delta T},0\right) $$"></p><pre class="codeinput">    <span class="keyword">function</span> hz = HazardRate(sp1,sp2,dt)
+        hz = max(-log(sp2/sp1)/dt,0);
+    <span class="keyword">end</span>
+
+    delta = spread(:,1) - [0;spread(1:end-1,1)];
+    spread = spread(:,2);
+    df = df(:,2);
+
+    rr = 1 - rr;
+
+    sp = ones(length(spread),1);
+    hz = zeros(length(spread),1);
+</pre><p><img src="CDSBootstrap_eq71758.png" alt="$$&#xA;p_0=\left(\frac{r-\frac{1}{2}\delta_0\Delta_0}{r+\frac{1}{2}\delta_0\Delta_0}\right)&#xA;$$"></p><pre class="codeinput">    f = 0.5 * spread(1) * delta(1);
+    sp(1) = (rr - f) / (rr + f);
+</pre><p><img src="CDSBootstrap_eq41423.png" alt="$$ \lambda_0=h\left(1,p_0,\delta_0\right) $$"></p><pre class="codeinput">    hz(1) = HazardRate(1,sp(1),delta(1));
+
+    <span class="keyword">for</span> i=2:length(spread)
+</pre><pre class="codeinput">        k = i-1;
+        sp1 = [1;sp(1:k-1)];
+
+        s1 = sum(df(1:k).*sp(1:k).*delta(1:k));
+        s2 = sum(df(1:k).*(sp1-sp(1:k)).*(delta(1:k)));
+        s3 = sum(df(1:k).*(sp1-sp(1:k)));
+</pre><p><img src="CDSBootstrap_eq05456.png" alt="$$ A=-{{\delta }_{i}}\left[ \left(&#xA;\sum\limits_{k=1}^{i-1}{d{{f}_{k}}{{p}_{k}}{{\Delta&#xA;}_{k}}+\frac{1}{2}\sum\limits_{k=1}^{i-1}{d{{f}_{k}}\left[&#xA;{{p}_{k}}-{{p}_{k-1}} \right]{{\Delta }_{k}}+\frac{1}{2}d{{f}_{i}}{{p}_{i-1}}{{\Delta }_{i}}}}&#xA;\right)+r\left( \sum\limits_{k=1}^{i-1}{d{{f}_{k}}\left[ {{p}_{k}}-{{p}_{k-1}} \right]&#xA;+{{p}_{i-1}}}d{{f}_{i}} \right) \right] $$"></p><pre class="codeinput">        A = -spread(i)*(s1 + 0.5*s2 + 0.5*df(i)*sp(i-1)*delta(i)) <span class="keyword">...</span>
+            + rr * (s3 + sp(i-1) * df(i));
+</pre><p><img src="CDSBootstrap_eq61223.png" alt="$$ B=d{{f}_{i}}{{p}_{i-1}}\left( \frac{1}{2}{{\delta&#xA;}_{i}}{{\Delta }_{i}}+r \right) $$"></p><pre class="codeinput">        B = df(i) * sp(i-1) * (0.5 * spread(i) * delta(i) + rr);
+</pre><p><img src="CDSBootstrap_eq01314.png" alt="$$ p_i=p_{i-1}\left(\frac{A}{B}\right) $$"></p><pre class="codeinput">        sp(i) = sp(i-1) * (A / B);
+
+        <span class="keyword">if</span> sp(i) &gt; sp(i-1)
+            sp(i) = sp(i-1);
+            hz(i) = 0;
+        <span class="keyword">else</span>
+            hz(i) = HazardRate(sp(i-1),sp(i),delta(i));
+        <span class="keyword">end</span>
+</pre><pre class="codeinput">    <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br>
+      Published with MATLAB&reg; 7.12<br></p></div><!--
+##### SOURCE BEGIN #####
+%% Credit Default Swap Piece-Wise Hazard Rate Bootstrapping
+% 
+% 
+
+function [sp,hz]=CDSBootstrap(rr,df,spread)
+%% Input Parameters
+%
+% <html>
+% <table border=1>
+% <tr><td>rr</td><td>Recovery Rate</td></tr>
+% <tr><td>df</td><td>Discount Factors</td></tr>
+% <tr><td>spread</td><td>Market credit default swap spreads</td></tr>
+% </table>
+% </html>
+%
+%% Output Parameters
+%
+% <html>
+% <table border=1>
+% <tr><td>sp</td><td>Survival Probabilities</td></tr>
+% <tr><td>hz</td><td>Hazard Rates</td></tr>
+% </table>
+% </html>
+
+%% Hazard Rate Function
+%
+% $$ h\left(\cdot\right) = \mbox{max}\left(-\frac{\mbox{ln}\frac{p_{i+1}}{p_{i}}}{\Delta T},0\right) $$
+%
+    function hz = HazardRate(sp1,sp2,dt)
+        hz = max(-log(sp2/sp1)/dt,0);
+    end
+
+    delta = spread(:,1) - [0;spread(1:end-1,1)];
+    spread = spread(:,2);
+    df = df(:,2);
+    
+    rr = 1 - rr;
+    
+    sp = ones(length(spread),1);
+    hz = zeros(length(spread),1);
+    
+    %%
+    %
+    % $$
+    % p_0=\left(\frac{r-\frac{1}{2}\delta_0\Delta_0}{r+\frac{1}{2}\delta_0\Delta_0}\right)
+    % $$
+    f = 0.5 * spread(1) * delta(1);
+    sp(1) = (rr - f) / (rr + f);
+    
+    %%
+    %
+    % $$ \lambda_0=h\left(1,p_0,\delta_0\right) $$
+    hz(1) = HazardRate(1,sp(1),delta(1));
+    
+    for i=2:length(spread)
+        
+        k = i-1;
+        sp1 = [1;sp(1:k-1)];
+
+        s1 = sum(df(1:k).*sp(1:k).*delta(1:k));
+        s2 = sum(df(1:k).*(sp1-sp(1:k)).*(delta(1:k)));
+        s3 = sum(df(1:k).*(sp1-sp(1:k)));
+
+        %%
+        %
+        % $$ A=-{{\delta }_{i}}\left[ \left(
+        % \sum\limits_{k=1}^{i-1}{d{{f}_{k}}{{p}_{k}}{{\Delta
+        % }_{k}}+\frac{1}{2}\sum\limits_{k=1}^{i-1}{d{{f}_{k}}\left[
+        % {{p}_{k}}-{{p}_{k-1}} \right]{{\Delta }_{k}}+\frac{1}{2}d{{f}_{i}}{{p}_{i-1}}{{\Delta }_{i}}}}
+        % \right)+r\left( \sum\limits_{k=1}^{i-1}{d{{f}_{k}}\left[ {{p}_{k}}-{{p}_{k-1}} \right]
+        % +{{p}_{i-1}}}d{{f}_{i}} \right) \right] $$
+        %
+        A = -spread(i)*(s1 + 0.5*s2 + 0.5*df(i)*sp(i-1)*delta(i)) ...
+            + rr * (s3 + sp(i-1) * df(i));
+        
+        %%
+        %
+        % $$ B=d{{f}_{i}}{{p}_{i-1}}\left( \frac{1}{2}{{\delta
+        % }_{i}}{{\Delta }_{i}}+r \right) $$
+        %
+        B = df(i) * sp(i-1) * (0.5 * spread(i) * delta(i) + rr);
+
+        %%
+        %
+        % $$ p_i=p_{i-1}\left(\frac{A}{B}\right) $$
+        %
+        sp(i) = sp(i-1) * (A / B);
+        
+        if sp(i) > sp(i-1)
+            sp(i) = sp(i-1);
+            hz(i) = 0;
+        else
+            hz(i) = HazardRate(sp(i-1),sp(i),delta(i));
+        end
+        
+    end
+end
+##### SOURCE END #####
+--></body></html>

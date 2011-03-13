@@ -1,0 +1,237 @@
+function P = DoubleAverageRate(beta,S,K,w1,w2,alp1,alp2,Spg1,Spg2,r1,r2,df,b1,b2,sig1,sig2,ti1,ti2,t,T)
+% -------------------------------------------------------------------------
+% P = DoubleAverageRate(beta,S,K,w1,w2,alp1,alp2,Spg1,Spg2,r,b,sig,n1,n2,ti1,ti2,t,T)
+%
+% Author: Michael Shou-Cheng Lee
+%
+% This function calculates the double average rate option price
+% for single underlying asset with arithmetic average.
+%
+% beta =  1 if it is a call; -1 if it is a put.
+% S =   the current asset price.
+% K =   the strike price.
+% w1 =  weights on the first average.
+% w2 =  weights on the second average.
+% alp1 = the array of normalised weights in the first average.
+% alp2 = the array of normalised weights in the second average.
+% Spg1 = the array of observed fixings in the first average.
+% Spg2 = the array of observed fixings in the second average.
+% r1 = the array of risk-free rates in the first average.
+% r2 = the array of risk-free rates in the second average.
+% b1 = the array of cost of carries in the first average.
+% b2 = the array of cost of carries in the second average.
+% sig1 = the array of volatilities in the first average.
+% sig2 = the array of volatilities in the second average.
+% ti1 = array of time in to the ith fixing from
+%       contract origination date for the first average.
+% ti2 = array of time in to the ith fixing from
+%       contract origination date for the first average.
+% t =   the current time measured from contract initiation date.
+% T =   the original time to maturity.
+% -------------------------------------------------------------------------
+
+if (beta ~= 1 && beta ~= -1)
+    fprintf('Call/Put beta must be 1 or -1');
+    return;
+end
+
+if ((length(alp1)~=length(r1)) || length(alp1)~=length(b1) || length(alp1)~=length(sig1) || length(alp1)~=length(ti1))
+    fprintf('Array of inputs for the first average do not match.\n');
+    return;
+end
+
+if ((length(alp2)~=length(r2)) || length(alp2)~=length(b2) || length(alp2)~=length(sig2) || length(alp2)~=length(ti2))
+    fprintf('Array of inputs for the second average do not match.\n');
+    return;
+end
+
+if(t>ti1(1))
+    if (length(Spg1) == length(find(ti1<=t)))
+        Spg1 = Spg1;
+    else
+        fprintf('Number of observed fixings in the first average mismatch the current time.\n');
+        return;
+    end
+
+elseif (t==ti1(1))
+    if(length(Spg1)==length(S) && Spg1==S)
+        Spg1 = S;
+    else
+        fprintf('When t==t1(1), we can only have the current observation for the first average.\n');
+        return;
+    end
+else
+    if (length(Spg1) == 0)
+        Spg1 == [];
+    else
+        fprintf('When t<t1(1), we cannot have any oberserved fixings for the first average.\n');
+        return;
+    end
+end
+
+if(t>ti2(1))
+    if (length(Spg2) == length(find(ti2<=t)))
+        Spg2 = Spg2;
+    else
+        fprintf('Number of observed fixings in the second average mismatch the current time.\n');
+        return;
+    end
+
+elseif (t==ti2(1))
+    if(length(Spg2)==length(S) && Spg2==S)
+        Spg2 = S;
+    else
+        fprintf('When t==t2(1), we can only have the current observation for the second average.\n');
+        return;
+    end
+else
+    if (length(Spg2) == 0)
+        Spg2 == [];
+    else
+        fprintf('When t<t2(1), we cannot have any oberserved fixings for the second average.\n');
+        return;
+    end
+end
+
+if (ti1(length(ti1)) > T || ti2(length(ti2)) > T)
+    fprintf('Fixings after option expiration is not permitted.\n');
+    return;
+end
+
+if (t > T)
+    fprintf('Valuation date after option exipiration is not permitted.\n');
+    return;
+end
+
+%if (ti1 == ti2)
+%    fprintf('Fixing time cannot overlap exactly for the two averages.\n');
+%    return;
+%end
+
+if(length(Spg1)~=0 && length(Spg2)~=0)
+    if (t==ti1(length(Spg1)) && S~=Spg1(length(Spg1)))
+        fprintf('Current asset price does not match the observed fixing in the first average.\n');
+        return;
+    end
+
+    if (t==ti2(length(Spg2)) && S~=Spg2(length(Spg2)))
+        if(CP=='c')
+            P = (
+        return;
+    end
+end
+
+if(t>=ti1(length(alp1)) && t>=ti2(length(alp2)))
+    fprintf('Valuation date cannot be after all fixings for both averaging periods.\n');
+    return;
+end
+
+alp1
+alp2
+Spg1
+Spg2
+r1
+r2
+df
+b1
+b2
+sig1
+sig2
+ti1
+ti2
+t
+T
+
+tau = T - t;
+n1 = length(alp1);
+n2 = length(alp2);
+
+m1 = length(Spg1);
+if (m1~=0)
+    alpm1 = alp1(1:m1,:);
+    Stmbar1 = alpm1'*Spg1;
+else
+    Stmbar1 = 0;
+end
+Stmbar1
+
+m2 = length(Spg2);
+if (m2~=0)
+    alpm2 = alp2(1:m2,:);
+    Stmbar2 = alpm2'*Spg2;
+else
+    Stmbar2 = 0;
+end
+Stmbar2
+
+sum1 = 0;
+for i=m1+1:n1
+    F1(i) = S*exp(b1(i)*(ti1(i)-t))
+    sum1 = sum1 + alp1(i)*F1(i)
+end
+EStnbar1 = Stmbar1 + sum1
+
+sum2 = 0;
+for i=m2+1:n2
+    F2(i) = S*exp(b2(i)*(ti2(i)-t));
+    sum2 = sum2 + alp2(i)*F2(i);
+end
+EStnbar2 = Stmbar2 + sum2
+
+doublesum1 = 0;
+for i = m1+1:n1
+    for j = m1+1:n1
+        if(ti1(i)<=ti1(j))
+            sigmin = sig1(i);
+        else
+            sigmin = sig1(j);
+        end
+        doublesum1 = doublesum1 + ...
+            alp1(i)*alp1(j)*F1(i)*F1(j)* ...
+            exp(sigmin^2*min(ti1(i)-t,ti1(j)-t));
+    end
+end
+
+EStnbar1sqr = Stmbar1^2 + 2*Stmbar1*sum1 + doublesum1
+
+doublesum2 = 0;
+for i = m2+1:n2
+    for j = m2+1:n2
+        if(ti2(i)<=ti2(j))
+            sigmin = sig2(i);
+        else
+            sigmin = sig2(j);
+        end
+        doublesum2 = doublesum2 + ...
+            alp2(i)*alp2(j)*F2(i)*F2(j)* ...
+            exp(sigmin^2*min(ti2(i)-t,ti2(j)-t));
+    end
+end
+
+EStnbar2sqr = Stmbar2^2 + 2*Stmbar2*sum2 + doublesum2
+
+crosssum = 0;
+for i = m1+1:n1
+    for j = m2+1:n2
+        if(ti1(i)<=ti2(j))
+            sigmin = sig1(i);
+        else
+            sigmin = sig2(j);
+        end
+        crosssum = crosssum + ...
+            alp1(i)*alp2(j)*F1(i)*F2(j)* ...
+            exp(sigmin^2*min(ti1(i)-t,ti2(j)-t));
+    end
+end
+
+ES1S2 = Stmbar1*Stmbar2 + Stmbar1*sum2 + Stmbar2*sum1 + crosssum
+
+mu = w1*EStnbar1 - w2*EStnbar2
+
+v = w1^2*(EStnbar1sqr - EStnbar1^2) + w2^2*(EStnbar2sqr - EStnbar2^2)- ...
+    2*w1*w2*(ES1S2 - EStnbar1*EStnbar2)
+
+P = df*(sqrt(v/(2*pi))*exp(-1/2*(K-mu)^2/v)+ ...
+    (mu-K)*((1+beta)/2-normcdf((K-mu)/sqrt(v))));
+
+end
