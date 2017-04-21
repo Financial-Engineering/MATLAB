@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>CorrelatedTwoFactor</title><meta name="generator" content="MATLAB 7.11"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2011-01-25"><meta name="DC.source" content="CorrelatedTwoFactor.m"><style type="text/css">
+      --><title>CorrelatedTwoFactor</title><meta name="generator" content="MATLAB 7.12"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2011-06-15"><meta name="DC.source" content="CorrelatedTwoFactor.m"><style type="text/css">
 
 body {
   background-color: white;
@@ -84,13 +84,9 @@ p.footer {
         - 0.5 * ((a1 * sig1)^2 + (a2 * sig2 .* speed).^2 <span class="keyword">...</span>
         + 2.0 * rho * a1 * sig1 * a2 * sig2 .* speed) * dt <span class="keyword">...</span>
         + a1 * sig1 .* zeta1 * sqrt(dt) + a2 * sig2 .* speed .* zeta2 * sqrt(dt);
-</pre><pre class="codeoutput">Input argument "mu1" is undefined.
-
-Error in ==&gt; CorrelatedTwoFactor at 39
-    lambda = (mu1 + mu2 .* speed) * dt ...  
 </pre><pre class="codeinput"><span class="keyword">end</span>
 </pre><p class="footer"><br>
-      Published with MATLAB&reg; 7.11<br></p></div><!--
+      Published with MATLAB&reg; 7.12<br></p></div><!--
 ##### SOURCE BEGIN #####
 function lambda = CorrelatedTwoFactor(mu1,mu2,speed,dt,a1,a2,sig1,sig2,rho,zeta1,zeta2)
 

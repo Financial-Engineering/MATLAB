@@ -76,6 +76,7 @@ function [p tbl]=EquitySwap(N,dfs,S,S0,q,divs,reset,payment,dt0,DCB1,DCB2)
         % 
         % $$ div_i = \left \{ \begin{array}{ll} {\sum_{j}df_{j}Div_{j}} & {q=0} \\ 0 & \mbox{otherwise} \end{array} \right. $$
         %
+        % $$ 1{\hskip -3 pt}\hbox{I} \qquad \qquad $$
         div = 0;
         if q == 0
             if ~isempty(divs)

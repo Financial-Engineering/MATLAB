@@ -1,0 +1,195 @@
+<html xmlns:mwsh="http://www.mathworks.com/namespace/mcode/v1/syntaxhighlight.dtd">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <!--
+This HTML is auto-generated from an M-file.
+To make changes, update the M-file and republish this document.
+      -->
+      <title>longstaffSchwartz2a</title>
+      <meta name="generator" content="MATLAB 7.0">
+      <meta name="date" content="2006-03-16">
+      <meta name="m-file" content="longstaffSchwartz2a"><style>
+body {
+  background-color: white;
+  margin:10px;
+}
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+pre.codeinput {
+  margin-left: 30px;
+}
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.showbuttons {
+  margin-left: 30px;
+  border: solid black 2px;
+  padding: 4px;
+  background: #EBEFF3;
+}
+
+pre.codeoutput {
+  color: gray;
+  font-style: italic;
+}
+pre.error {
+  color: red;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows.  On Gecko-based browsers, the shrink-to-fit doesn't work. */ 
+p,h1,h2,div {
+  /* for MATLAB's browser */
+  width: 600px;
+  /* for Mozilla, but the "width" tag overrides it anyway */
+  max-width: 600px;
+  /* for IE */
+  width:expression(document.body.clientWidth > 620 ? "600px": "auto" );
+}
+
+    </style></head>
+   <body><pre class="codeinput"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">%  Longstaff Schwartz for American Put Option</span>
+<span class="comment">%  by markus leippold @2005</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">% basic inputs</span>
+<span class="comment">% clear all</span>
+<span class="comment">% randn('seed',128)               % you may want to use different seeds...</span>
+close <span class="string">all</span>
+n       = 1000;                     <span class="comment">% numbers of paths to simulate</span>
+N       = 16;                        <span class="comment">% number of exercise points</span>
+T       = 1;                        <span class="comment">% time to maturity</span>
+dt      = T/N;
+S0      = 100;                      <span class="comment">% initial stock price</span>
+K       = 100;                      <span class="comment">% xrsice price</span>
+r       = 0.05;                     <span class="comment">% interest rate</span>
+sig     = 0.2;                      <span class="comment">% stock price vola</span>
+dW      = sqrt(dt)*randn(N-1,n);    <span class="comment">% standard Brownian increments</span>
+disc    = exp(-r*dt);               <span class="comment">% discout factor</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">% simulate asset processes</span>
+S = S0*exp(cumsum((r - 1/2*sig^2)*dt + sig*dW));
+S = [ones(1,n)*S0; S ]';
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+P = zeros(n,N);                     <span class="comment">% initialize payoff matrix</span>
+P(:,N) = max(0,S(:,N)-K);           <span class="comment">% American put option</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="keyword">for</span> nn = N-1:-1:2
+    y = max(0,-K+S(:,nn));          <span class="comment">% payoff of put option</span>
+    yex = [];
+    X   = [];
+    Y   = [];
+    <span class="keyword">for</span> i = 1:n
+        <span class="keyword">if</span> y(i) &gt; 0                     <span class="comment">% if in-the-money, then...</span>
+            yex = [yex; y(i)];          <span class="comment">% exercise values</span>
+            X   = [X; S(i,nn)];          <span class="comment">% stock prices at exercise values</span>
+            Y   = [Y;(disc.^[1:N-nn])*P(i,nn+1:N)']; <span class="comment">% discount the cash flows to time step nn</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+    <span class="comment">% basis functions 1, X, X^2</span>
+    A = [ones(size(yex)) X  X.*X   ] ;
+    <span class="comment">% Least-Square Regression:</span>
+    [U,W,V] = svd(A);
+    b = V*(W\(U'*Y));
+    <span class="comment">% continuation value</span>
+    yco = A*b;
+    <span class="comment">% stopping rule</span>
+    j = 1;
+    <span class="keyword">for</span> i = 1:n
+        <span class="keyword">if</span> y(i)&gt;0
+            <span class="keyword">if</span> (yex(j) &gt; yco(j))
+                P(i,:) = 0;
+                P(i,nn) = yex(j);
+            <span class="keyword">end</span>
+            j = j+1;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+price = sum(P*disc.^[0:N-1]')/n      <span class="comment">% final price of the American contract</span>
+</pre><pre class="codeoutput">price =
+   10.2630
+</pre><p class="footer"><br>
+         Published with MATLAB&reg; 7.0<br></p>
+      <!--
+##### SOURCE BEGIN #####
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  Longstaff Schwartz for American Put Option
+%  by markus leippold @2005
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% basic inputs
+% clear all
+% randn('seed',128)               % you may want to use different seeds...
+close all
+n       = 1000;                     % numbers of paths to simulate
+N       = 16;                        % number of exercise points
+T       = 1;                        % time to maturity
+dt      = T/N;
+S0      = 100;                      % initial stock price
+K       = 100;                      % xrsice price
+r       = 0.05;                     % interest rate
+sig     = 0.2;                      % stock price vola
+dW      = sqrt(dt)*randn(N-1,n);    % standard Brownian increments
+disc    = exp(-r*dt);               % discout factor
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% simulate asset processes
+S = S0*exp(cumsum((r - 1/2*sig^2)*dt + sig*dW));
+S = [ones(1,n)*S0; S ]';
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+P = zeros(n,N);                     % initialize payoff matrix
+P(:,N) = max(0,S(:,N)-K);           % American put option
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+for nn = N-1:-1:2
+    y = max(0,-K+S(:,nn));          % payoff of put option
+    yex = [];
+    X   = [];
+    Y   = [];
+    for i = 1:n
+        if y(i) > 0                     % if in-the-money, then...
+            yex = [yex; y(i)];          % exercise values
+            X   = [X; S(i,nn)];          % stock prices at exercise values
+            Y   = [Y;(disc.^[1:N-nn])*P(i,nn+1:N)']; % discount the cash flows to time step nn
+        end
+    end
+    % basis functions 1, X, X^2
+    A = [ones(size(yex)) X  X.*X   ] ;
+    % Least-Square Regression:
+    [U,W,V] = svd(A);
+    b = V*(W\(U'*Y));
+    % continuation value
+    yco = A*b;
+    % stopping rule
+    j = 1;
+    for i = 1:n
+        if y(i)>0
+            if (yex(j) > yco(j))
+                P(i,:) = 0;
+                P(i,nn) = yex(j);
+            end
+            j = j+1;
+        end
+    end
+end
+price = sum(P*disc.^[0:N-1]')/n      % final price of the American contract
+##### SOURCE END #####
+-->
+   </body>
+</html>

@@ -1,0 +1,73 @@
+function [ y ] = bjerkStens2002(S,X,T,r,b,sig)
+
+    function [ y ] = phi(S,T,gamma,H,I)
+        lambda = (-r + gamma * b + 0.5 * gamma * (gamma - 1) * sig ^ 2) * T;
+        d = -(log(S / H) + (b + (gamma - 0.5) * sig ^ 2) * T) / (sig * sqrt(T));
+        kappa = 2 * b / sig ^ 2 + 2 * gamma - 1;
+
+        p = cnorm(d - 2 * log(I / S) / (sig * sqrt(T)));
+        if p == 0
+            y = exp(lambda) * S ^ gamma * cnorm(d);
+        else
+            y = exp(lambda) * S ^ gamma * (cnorm(d) - (I / S) ^ kappa * p);
+        end
+    end
+
+    function [ y ] = psi(S,T,gamma,H,I2,I1,t1)
+        e1 = (log(S / I1) + (b + (gamma - 0.5) * sig ^ 2) * t1) / (sig * sqrt(t1));
+        e2 = (log(I2 ^ 2 / (S * I1)) + (b + (gamma - 0.5) * sig ^ 2) * t1) / (sig * sqrt(t1));
+        e3 = (log(S / I1) - (b + (gamma - 0.5) * sig ^ 2) * t1) / (sig * sqrt(t1));
+        e4 = (log(I2 ^ 2 / (S * I1)) - (b + (gamma - 0.5) * sig ^ 2) * t1) / (sig * sqrt(t1));
+
+        f1 = (log(S / H) + (b + (gamma - 0.5) * sig ^ 2) * T) / (sig * sqrt(T));
+        f2 = (log(I2 ^ 2 / (S * H)) + (b + (gamma - 0.5) * sig ^ 2) * T) / (sig * sqrt(T));
+        f3 = (log(I1 ^ 2 / (S * H)) + (b + (gamma - 0.5) * sig ^ 2) * T) / (sig * sqrt(T));
+        f4 = (log(S * I1 ^ 2 / (H * I2 ^ 2)) + (b + (gamma - 0.5) * sig ^ 2) * T) / (sig * sqrt(T));
+
+        rho = sqrt(t1 / T);
+        lambda = -r + gamma * b + 0.5 * gamma * (gamma - 1) * sig ^ 2;
+        kappa = 2 * b / (sig ^ 2) + (2 * gamma - 1);
+
+        y = exp(lambda * T) * S ^ gamma * (bvnl(-e1, -f1, rho) ...
+                 - (I2 / S) ^ kappa * bvnl(-e2, -f2, rho) ...
+                 - (I1 / S) ^ kappa * bvnl(-e3, -f3, -rho) ...
+                 + (I1 / I2) ^ kappa * bvnl(-e4, -f4, -rho));
+    end
+    
+    t1 = 0.5 * (sqrt(5) - 1) * T;
+    
+    beta = (1 / 2 - b / sig ^ 2) + sqrt((b / sig ^ 2 - 1 / 2) ^ 2 + 2 * r / sig ^ 2);
+    Binf = beta / (beta - 1) * X;
+    B0 = max(X, r / (r - b) * X);
+
+    ht1 = -(b * t1 + 2 * sig * sqrt(t1)) * X ^ 2 / ((Binf - B0) * B0);
+    ht2 = -(b * T + 2 * sig * sqrt(T)) * X ^ 2 / ((Binf - B0) * B0);
+    I1 = B0 + (Binf - B0) * (1 - exp(ht1));
+    I2 = B0 + (Binf - B0) * (1 - exp(ht2));
+    
+    alpha1 = (I1 - X) * I1 ^ (-beta);
+    alpha2 = (I2 - X) * I2 ^ (-beta);
+
+    if (b >= r)
+        y = blackscholes(1,S,X,T,T,r,b,sig);
+        return;
+    end
+
+    if (S >= I2)
+        y = S - X;
+    else
+        y = alpha2 * S ^ beta ...
+            - alpha2 * phi(S, t1, beta, I2, I2) ...
+            + phi(S, t1, 1, I2, I2) ...
+            - phi(S, t1, 1, I1, I2) ...
+            - X * phi(S, t1, 0, I2, I2) ...
+            + X * phi(S, t1, 0, I1, I2) ...
+            + alpha1 * phi(S, t1, beta, I1, I2) ...
+            - alpha1 * psi(S, T, beta, I1, I2, I1, t1) ...
+            + psi(S, T, 1, I1, I2, I1, t1) ...
+            - psi(S, T, 1, X, I2, I1, t1) ...
+            - X * psi(S, T, 0, I1, I2, I1, t1) ...
+            + X * psi(S, T, 0, X, I2, I1, t1);
+    end
+    
+end

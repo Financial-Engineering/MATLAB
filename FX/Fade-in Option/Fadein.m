@@ -4,7 +4,7 @@ function P = Fadein(cp,io,ud,r,rf,vol,df,S,h,K,T1,T2)
 % -------------------------------------------------------------------------
 % P = Fadein(cp,io,ud,r,rf,vol,df,S,h,K,T1,T2,t0,T)
 %
-% Author: Michael Shou-Cheng Lee
+% Author: Richard Lewis
 %
 % This function calculates the prices for a foreign exchange
 % fade-in option.
